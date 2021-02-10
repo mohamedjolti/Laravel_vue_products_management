@@ -17,3 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// ( run  "php artisan route:list" to see all the routes )
+
+//Category API routes
+Route::resource("category",CategoryController::class);
+//Product API routes
+Route::resource("product",ProductController::class);
