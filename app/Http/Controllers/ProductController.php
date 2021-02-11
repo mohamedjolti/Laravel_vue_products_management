@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Product;
 use Illuminate\Http\Request;
 use Validator;
+use App\Services\Validation;
+
 
 class ProductController extends Controller
 {
@@ -53,30 +55,10 @@ class ProductController extends Controller
     public function store(Request $request)
     { 
         //validation
-        //rules of each field
-        $rules = [
-            'name' => 'required',
-            'description'=>'required',
-             'price'=>'required',
-             'image'=>'file|image',
-             'category'=>'required'
-        ];
-        //message for each rule
-        $messages = [
-            'name.required' => 'name is required',
-            'description.required'=>"description is required",
-            'price.required'=>"price is required",
-            'category.required'=>"category is required",
-             'image.file'=>"the image should be a file",
-             'image.image'=>"the image should be file of type image"
-          ];
+        if(Validation::validatorCreateProduct($request->all())!==true){
+            return Validation::validatorCreateProduct($request->all());
+        };
 
-    
-       $validator=Validator::make($request->all(),$rules,$messages);
-       // if the one the field is not valide
-       if($validator->fails()){
-                return response()->json($validator->messages(), 200);
-       }
         // creation of new product
         $product=new Product($request->all());
         $product->image=$request->file("image")->getClientOriginalName();

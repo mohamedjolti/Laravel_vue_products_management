@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
-use Validator;
-
+use App\Services\Validation;
 
 class CategoryController extends Controller
 {
@@ -17,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        return response()->json( Category::all() ,201);
+        return response()->json(Category::all(), 201);
     }
 
     /**
@@ -40,30 +39,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        public function store(Request $request)
-        { 
-            //validation
-            //rules of each field
-            $rules = [
-                'name' => 'required',
-            ];
-            //message for each rule
-            $messages = [
-                'name.required' => 'name is required',
-              ];
-    
-        
-           $validator=Validator::make($request->all(),$rules,$messages);
-       // if the one the field is not valide
 
-           if($validator->fails()){
-                    return response()->json($validator->messages(), 200);
-           }
-        //creation of new category
-        
+        //validation
+         if(Validation::validatorCreateCategory($request->all())!==true){
+             return Validation::validatorCreateCategory($request->all());
+         }
+
         $category = Category::create($request->all());
-        return response()->json( $category ,201);
+        return response()->json($category, 201);
     }
 
     /**
