@@ -2042,6 +2042,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2124,7 +2127,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialog = true;
     },
     selectFile: function selectFile(event) {
-      this.editedItem['image'] = event.target.files[0];
+      this.editedItem["image"] = event.target.files[0];
       console.log(this.editedItem[name]);
     },
     close: function close() {
@@ -2138,7 +2141,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(this.getCategories);
     },
     save: function save() {
-      //       this.editedItem.category=this.editedItem.category.id
       console.log(this.editedItem);
       this.addProduct(this.editedItem);
       this.close();
@@ -2179,7 +2181,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nv-img {\r\n  border-radius: 50%;\n}\n.image-special {\r\n  position: relative;\r\n  top: 8px;\n}\r\n", ""]);
+exports.push([module.i, "\nv-img {\r\n  border-radius: 50%;\n}\n.image-special {\r\n  position: relative;\r\n  top: 12px;\n}\r\n", ""]);
 
 // exports
 
@@ -4154,7 +4156,7 @@ var render = function() {
                                 ),
                                 on
                               ),
-                              [_vm._v("\n            New Item\n          ")]
+                              [_vm._v("\n            New Product\n          ")]
                             )
                           ]
                         }

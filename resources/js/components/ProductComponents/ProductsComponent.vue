@@ -21,7 +21,7 @@
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="info" dark class="mb-2" v-bind="attrs" v-on="on">
-              New Item
+              New Product
             </v-btn>
           </template>
           <v-card>
@@ -51,11 +51,14 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                   <v-select v-model="editedItem.category" :items="getCategories"  item-text="name"
-          item-value="id"
-          label="category"
-          >
-                      </v-select>
+                    <v-select
+                      v-model="editedItem.category"
+                      :items="getCategories"
+                      item-text="name"
+                      item-value="id"
+                      label="category"
+                    >
+                    </v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <input
@@ -122,7 +125,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(["getProducts","getCategories"]),
+    ...mapGetters(["getProducts", "getCategories"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
@@ -144,7 +147,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["fetchProducts","addProduct","fetchCategories"]),
+    ...mapActions(["fetchProducts", "addProduct", "fetchCategories"]),
 
     initialize() {
       this.desserts = [
@@ -171,7 +174,7 @@ export default {
       this.dialog = true;
     },
     selectFile(event) {
-      this.editedItem['image'] = event.target.files[0];
+      this.editedItem["image"] = event.target.files[0];
       console.log(this.editedItem[name]);
     },
 
@@ -184,8 +187,7 @@ export default {
       console.log(this.getCategories);
     },
     save() {
- //       this.editedItem.category=this.editedItem.category.id
-        console.log(this.editedItem);
+      console.log(this.editedItem);
       this.addProduct(this.editedItem);
 
       this.close();
@@ -200,6 +202,6 @@ v-img {
 }
 .image-special {
   position: relative;
-  top: 8px;
+  top: 12px;
 }
 </style>
