@@ -38,9 +38,7 @@ class Validation
         $rules = [
             'name' => 'required',
             'description' => 'required',
-            'price' => 'required',
-            'image' => 'required |file|image',
-            'category' => 'required'
+            'price' => 'required'
         ];
         //message for each rule
         $messages = [
@@ -51,7 +49,6 @@ class Validation
             'image.file' => "the image should be a file",
             'image.image' => "the image should be file of type image",
             'image.required' => "the image is required"
-
         ];
 
 

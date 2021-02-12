@@ -15,23 +15,24 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public Function Upload(Request $request,$Name_File){   
+    public function Upload(Request $request, $Name_File)
+    {
         //get the file name
         $filenameWithExt = $request->file($Name_File)->getClientOriginalName();
-        
+
         $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
         //get extansion
         $extension = $request->file($Name_File)->getClientOriginalExtension();
         //get the name of the file
-        $filenameToStore = $filename.'.'.$extension;
-         // store the image
-        $path= $request->file($Name_File)->storeAs('public/photos/',$filenameToStore);  
+        $filenameToStore = $filename . '.' . $extension;
+        // store the image
+        $path = $request->file($Name_File)->storeAs('public/photos/', $filenameToStore);
     }
 
     public function index()
     {
         //
-        return response()->json( Product::all() ,201);
+        return response()->json(Product::all(), 201);
     }
 
     /**
@@ -53,19 +54,19 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { 
+    {
         //validation
-        if(Validation::validatorCreateProduct($request->all())!==true){
+        if (Validation::validatorCreateProduct($request->all()) !== true) {
             return Validation::validatorCreateProduct($request->all());
         };
 
         // creation of new product
-        $product=new Product($request->all());
-        $product->image=$request->file("image")->getClientOriginalName();
+        $product = new Product($request->all());
+        $product->image = $request->file("image")->getClientOriginalName();
         $product->save();
-        $this->Upload($request,"image");
+        $this->Upload($request, "image");
 
-        return response()->json( $product ,201);
+        return response()->json($product, 201);
     }
 
     /**
