@@ -13,6 +13,11 @@
         max-height="70px"
       ></v-img>
     </template>
+    <template v-slot:item.category="{ item }">
+      <v-chip dark>
+        {{ getCategoriesNamesIds[item.category] }}
+      </v-chip>
+    </template>
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Add new Product</v-toolbar-title>
@@ -125,7 +130,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(["getProducts", "getCategories"]),
+    ...mapGetters(["getProducts", "getCategories", "getCategoriesNamesIds"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
@@ -147,7 +152,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(["fetchProducts", "addProduct", "fetchCategories"]),
+    ...mapActions([
+      "fetchProducts",
+      "addProduct",
+      "fetchCategories",
+      "getCategoryNameById",
+    ]),
 
     initialize() {
       this.desserts = [
@@ -186,6 +196,7 @@ export default {
       });
       console.log(this.getCategories);
     },
+
     save() {
       console.log(this.editedItem);
       this.addProduct(this.editedItem);

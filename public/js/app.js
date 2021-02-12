@@ -2045,6 +2045,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2087,7 +2092,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     };
   },
-  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getProducts", "getCategories"])), {}, {
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getProducts", "getCategories", "getCategoriesNamesIds"])), {}, {
     formTitle: function formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
@@ -2105,7 +2110,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.fetchProducts();
     this.fetchCategories();
   },
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["fetchProducts", "addProduct", "fetchCategories"])), {}, {
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["fetchProducts", "addProduct", "fetchCategories", "getCategoryNameById"])), {}, {
     initialize: function initialize() {
       this.desserts = [{
         name: "ddsd",
@@ -4111,6 +4116,21 @@ var render = function() {
                 "max-height": "70px"
               }
             })
+          ]
+        }
+      },
+      {
+        key: "item.category",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c("v-chip", { attrs: { dark: "" } }, [
+              _vm._v(
+                "\n      " +
+                  _vm._s(_vm.getCategoriesNamesIds[item.category]) +
+                  "\n    "
+              )
+            ])
           ]
         }
       },
@@ -62720,6 +62740,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -62729,12 +62755,17 @@ var state = {
   //Categorys array
   Categories: [],
   //fields for a category 
-  Categoryfields: ["name", 'parent_category']
+  Categoryfields: ["name", 'parent_category'],
+  // object of key value of each category (ex : {1:"sport",2:"education"})
+  CategoriesIdsNames: {}
 };
 var getters = {
   //getters for our state
   getCategories: function getCategories(state) {
     return state.Categories;
+  },
+  getCategoriesNamesIds: function getCategoriesNamesIds(state) {
+    return state.CategoriesIdsNames;
   }
 };
 var actions = {
@@ -62751,8 +62782,10 @@ var actions = {
 
             case 2:
               response = _context.sent;
-              console.log(response.data);
               context.commit("setCategories", response.data);
+              context.getters.getCategories.forEach(function (category) {
+                context.commit("AddNewCategoryNameId", category);
+              });
 
             case 5:
             case "end":
@@ -62782,7 +62815,7 @@ var actions = {
               response = _context2.sent;
               // use form data (because we have an image upload)
               context.commit("newCategory", response.data);
-              console.log(response.data);
+              context.commit("AddNewCategoryNameId", response.data);
 
             case 8:
             case "end":
@@ -62799,6 +62832,9 @@ var mutations = {
   },
   newCategory: function newCategory(state, Category) {
     return state.Categorys.unshift(Category);
+  },
+  AddNewCategoryNameId: function AddNewCategoryNameId(state, category) {
+    return state.CategoriesIdsNames = _objectSpread(_objectSpread({}, state.CategoriesIdsNames), {}, _defineProperty({}, category.id, category.name));
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
