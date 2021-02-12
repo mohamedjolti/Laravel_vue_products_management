@@ -14,7 +14,7 @@
       ></v-img>
     </template>
     <template v-slot:item.category="{ item }">
-      <v-chip dark>
+      <v-chip blue>
         {{ getCategoriesNamesIds[item.category] }}
       </v-chip>
     </template>
@@ -101,15 +101,15 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "Name (100g serving)",
+        text: "Name",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "name",
       },
-      { text: "description", value: "description" },
-      { text: "price", value: "price" },
-      { text: "category", value: "category" },
-      { text: "image", value: "image" },
+      { text: "description", value: "description",   sortable: false, },
+      { text: "price", value: "price"   , sortable: true, },
+      { text: "category", value: "category" , sortable: false,},
+      { text: "image", value: "image" , sortable: false,},
     ],
     desserts: [],
     editedIndex: -1,

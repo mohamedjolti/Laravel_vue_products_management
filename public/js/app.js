@@ -2057,22 +2057,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       dialog: false,
       dialogDelete: false,
       headers: [{
-        text: "Name (100g serving)",
+        text: "Name",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "name"
       }, {
         text: "description",
-        value: "description"
+        value: "description",
+        sortable: false
       }, {
         text: "price",
-        value: "price"
+        value: "price",
+        sortable: true
       }, {
         text: "category",
-        value: "category"
+        value: "category",
+        sortable: false
       }, {
         text: "image",
-        value: "image"
+        value: "image",
+        sortable: false
       }],
       desserts: [],
       editedIndex: -1,
@@ -4124,7 +4128,7 @@ var render = function() {
         fn: function(ref) {
           var item = ref.item
           return [
-            _c("v-chip", { attrs: { dark: "" } }, [
+            _c("v-chip", { attrs: { blue: "" } }, [
               _vm._v(
                 "\n      " +
                   _vm._s(_vm.getCategoriesNamesIds[item.category]) +
