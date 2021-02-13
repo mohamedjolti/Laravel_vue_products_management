@@ -2050,33 +2050,54 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       dialog: false,
       dialogDelete: false,
+      search: "",
       headers: [{
         text: "Name",
         align: "start",
         sortable: true,
-        value: "name"
+        value: "name",
+        filterable: false
       }, {
         text: "description",
         value: "description",
-        sortable: false
+        sortable: false,
+        filterable: false
       }, {
         text: "price",
         value: "price",
-        sortable: true
+        sortable: true,
+        filterable: false
       }, {
         text: "category",
         value: "category",
-        sortable: false
+        sortable: false,
+        filterable: true
       }, {
         text: "image",
         value: "image",
-        sortable: false
+        sortable: false,
+        filterable: false
       }],
       desserts: [],
       editedIndex: -1,
@@ -2099,6 +2120,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(["getProducts", "getCategories", "getCategoriesNamesIds"])), {}, {
     formTitle: function formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    filterProducts: function filterProducts() {
+      var _this = this;
+
+      var obj = JSON.parse(JSON.stringify(this.getCategoriesNamesIds));
+      return this.getProducts.filter(function (product) {
+        return obj[product["category"]].match(_this.search);
+      });
     }
   }),
   watch: {
@@ -2110,26 +2139,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    this.initialize();
-    this.fetchProducts();
+    //call the action to f
     this.fetchCategories();
+    this.fetchProducts();
   },
   methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["fetchProducts", "addProduct", "fetchCategories", "getCategoryNameById"])), {}, {
-    initialize: function initialize() {
-      this.desserts = [{
-        name: "ddsd",
-        description: 159,
-        price: 6.0,
-        category: 24,
-        image: 4.0
-      }, {
-        name: "ddsd",
-        description: 159,
-        price: 6.0,
-        category: 24,
-        image: 4.0
-      }];
-    },
     editItem: function editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -2140,12 +2154,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(this.editedItem[name]);
     },
     close: function close() {
-      var _this = this;
+      var _this2 = this;
 
       this.dialog = false;
       this.$nextTick(function () {
-        _this.editedItem = Object.assign({}, _this.defaultItem);
-        _this.editedIndex = -1;
+        _this2.editedItem = Object.assign({}, _this2.defaultItem);
+        _this2.editedIndex = -1;
       });
       console.log(this.getCategories);
     },
@@ -4099,273 +4113,336 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-data-table", {
-    staticClass: "elevation-1",
-    attrs: {
-      headers: _vm.headers,
-      items: this.getProducts,
-      "sort-by": "calories"
-    },
-    scopedSlots: _vm._u([
-      {
-        key: "item.image",
-        fn: function(ref) {
-          var item = ref.item
-          return [
-            _c("v-img", {
-              attrs: {
-                id: "image_round",
-                src: "/storage/photos/" + item.image,
-                "max-width": "50px",
-                "max-height": "70px"
-              }
-            })
-          ]
-        }
-      },
-      {
-        key: "item.category",
-        fn: function(ref) {
-          var item = ref.item
-          return [
-            _c("v-chip", { attrs: { blue: "" } }, [
-              _vm._v(
-                "\n      " +
-                  _vm._s(_vm.getCategoriesNamesIds[item.category]) +
-                  "\n    "
-              )
-            ])
-          ]
-        }
-      },
-      {
-        key: "top",
-        fn: function() {
-          return [
-            _c(
-              "v-toolbar",
-              { attrs: { flat: "" } },
-              [
-                _c("v-toolbar-title", [_vm._v("Add new Product")]),
-                _vm._v(" "),
-                _c("v-divider", {
-                  staticClass: "mx-4",
-                  attrs: { inset: "", vertical: "" }
-                }),
-                _vm._v(" "),
-                _c("v-spacer"),
-                _vm._v(" "),
+  return _c(
+    "v-card",
+    [
+      _c(
+        "v-card-title",
+        [
+          _c("v-text-field", {
+            attrs: {
+              "append-icon": "mdi-magnify",
+              label: "Filter By category",
+              "single-line": "",
+              "hide-details": ""
+            },
+            model: {
+              value: _vm.search,
+              callback: function($$v) {
+                _vm.search = $$v
+              },
+              expression: "search"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("v-data-table", {
+        staticClass: "elevation-1",
+        attrs: {
+          headers: _vm.headers,
+          items: _vm.filterProducts,
+          "sort-by": "calories"
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "item.image",
+            fn: function(ref) {
+              var item = ref.item
+              return [
+                _c("v-img", {
+                  attrs: {
+                    id: "image_round",
+                    src: "/storage/photos/" + item.image,
+                    "max-width": "50px",
+                    "max-height": "70px"
+                  }
+                })
+              ]
+            }
+          },
+          {
+            key: "item.category",
+            fn: function(ref) {
+              var item = ref.item
+              return [
+                _c("v-chip", { attrs: { blue: "" } }, [
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.getCategoriesNamesIds[item.category]) +
+                      "\n      "
+                  )
+                ])
+              ]
+            }
+          },
+          {
+            key: "top",
+            fn: function() {
+              return [
                 _c(
-                  "v-dialog",
-                  {
-                    attrs: { "max-width": "500px" },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "activator",
-                        fn: function(ref) {
-                          var on = ref.on
-                          var attrs = ref.attrs
-                          return [
-                            _c(
-                              "v-btn",
-                              _vm._g(
-                                _vm._b(
-                                  {
-                                    staticClass: "mb-2",
-                                    attrs: { color: "info", dark: "" }
-                                  },
-                                  "v-btn",
-                                  attrs,
-                                  false
-                                ),
-                                on
-                              ),
-                              [_vm._v("\n            New Product\n          ")]
-                            )
-                          ]
-                        }
-                      }
-                    ]),
-                    model: {
-                      value: _vm.dialog,
-                      callback: function($$v) {
-                        _vm.dialog = $$v
-                      },
-                      expression: "dialog"
-                    }
-                  },
+                  "v-toolbar",
+                  { attrs: { flat: "" } },
                   [
+                    _c("v-toolbar-title", [_vm._v("Add new Product")]),
+                    _vm._v(" "),
+                    _c("v-divider", {
+                      staticClass: "mx-4",
+                      attrs: { inset: "", vertical: "" }
+                    }),
+                    _vm._v(" "),
+                    _c("v-spacer"),
                     _vm._v(" "),
                     _c(
-                      "v-card",
-                      [
-                        _c("v-card-title", [
-                          _c("span", { staticClass: "headline" }, [
-                            _vm._v(_vm._s(_vm.formTitle))
-                          ])
+                      "v-dialog",
+                      {
+                        attrs: { "max-width": "500px" },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "activator",
+                            fn: function(ref) {
+                              var on = ref.on
+                              var attrs = ref.attrs
+                              return [
+                                _c(
+                                  "v-btn",
+                                  _vm._g(
+                                    _vm._b(
+                                      {
+                                        staticClass: "mb-2",
+                                        attrs: { color: "info", dark: "" }
+                                      },
+                                      "v-btn",
+                                      attrs,
+                                      false
+                                    ),
+                                    on
+                                  ),
+                                  [
+                                    _vm._v(
+                                      "\n              New Product\n            "
+                                    )
+                                  ]
+                                )
+                              ]
+                            }
+                          }
                         ]),
+                        model: {
+                          value: _vm.dialog,
+                          callback: function($$v) {
+                            _vm.dialog = $$v
+                          },
+                          expression: "dialog"
+                        }
+                      },
+                      [
                         _vm._v(" "),
                         _c(
-                          "v-card-text",
+                          "v-card",
                           [
+                            _c("v-card-title", [
+                              _c("span", { staticClass: "headline" }, [
+                                _vm._v(_vm._s(_vm.formTitle))
+                              ])
+                            ]),
+                            _vm._v(" "),
                             _c(
-                              "v-container",
+                              "v-card-text",
                               [
                                 _c(
-                                  "v-row",
+                                  "v-container",
                                   [
                                     _c(
-                                      "v-col",
-                                      {
-                                        attrs: { cols: "12", sm: "6", md: "4" }
-                                      },
+                                      "v-row",
                                       [
-                                        _c("v-text-field", {
-                                          attrs: { label: "Product name" },
-                                          model: {
-                                            value: _vm.editedItem.name,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                _vm.editedItem,
-                                                "name",
-                                                $$v
-                                              )
-                                            },
-                                            expression: "editedItem.name"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      {
-                                        attrs: { cols: "12", sm: "6", md: "4" }
-                                      },
-                                      [
-                                        _c("v-text-field", {
-                                          attrs: { label: "Description" },
-                                          model: {
-                                            value: _vm.editedItem.description,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                _vm.editedItem,
-                                                "description",
-                                                $$v
-                                              )
-                                            },
-                                            expression: "editedItem.description"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      {
-                                        attrs: { cols: "12", sm: "6", md: "4" }
-                                      },
-                                      [
-                                        _c("v-text-field", {
-                                          attrs: { label: "Price" },
-                                          model: {
-                                            value: _vm.editedItem.price,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                _vm.editedItem,
-                                                "price",
-                                                $$v
-                                              )
-                                            },
-                                            expression: "editedItem.price"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      {
-                                        attrs: { cols: "12", sm: "6", md: "4" }
-                                      },
-                                      [
-                                        _c("v-select", {
-                                          attrs: {
-                                            items: _vm.getCategories,
-                                            "item-text": "name",
-                                            "item-value": "id",
-                                            label: "category"
-                                          },
-                                          model: {
-                                            value: _vm.editedItem.category,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                _vm.editedItem,
-                                                "category",
-                                                $$v
-                                              )
-                                            },
-                                            expression: "editedItem.category"
-                                          }
-                                        })
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-col",
-                                      {
-                                        attrs: { cols: "12", sm: "6", md: "4" }
-                                      },
-                                      [
-                                        _c("input", {
-                                          staticClass: "image-special",
-                                          attrs: {
-                                            placeholder: "image",
-                                            type: "file"
-                                          },
-                                          on: {
-                                            change: function($event) {
-                                              return _vm.selectFile($event)
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              sm: "6",
+                                              md: "4"
                                             }
-                                          }
-                                        })
-                                      ]
+                                          },
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: { label: "Product name" },
+                                              model: {
+                                                value: _vm.editedItem.name,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "name",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "editedItem.name"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              sm: "6",
+                                              md: "4"
+                                            }
+                                          },
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: { label: "Description" },
+                                              model: {
+                                                value:
+                                                  _vm.editedItem.description,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "description",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "editedItem.description"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              sm: "6",
+                                              md: "4"
+                                            }
+                                          },
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: {
+                                                label: "Price",
+                                                type: "number",
+                                                required: ""
+                                              },
+                                              model: {
+                                                value: _vm.editedItem.price,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "price",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "editedItem.price"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              sm: "6",
+                                              md: "4"
+                                            }
+                                          },
+                                          [
+                                            _c("v-select", {
+                                              attrs: {
+                                                items: _vm.getCategories,
+                                                "item-text": "name",
+                                                "item-value": "id",
+                                                label: "category"
+                                              },
+                                              model: {
+                                                value: _vm.editedItem.category,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "category",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "editedItem.category"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              sm: "6",
+                                              md: "4"
+                                            }
+                                          },
+                                          [
+                                            _c("input", {
+                                              staticClass: "image-special",
+                                              attrs: {
+                                                placeholder: "image",
+                                                type: "file"
+                                              },
+                                              on: {
+                                                change: function($event) {
+                                                  return _vm.selectFile($event)
+                                                }
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ],
+                                      1
                                     )
                                   ],
                                   1
                                 )
                               ],
                               1
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-card-actions",
-                          [
-                            _c("v-spacer"),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "blue darken-1", text: "" },
-                                on: { click: _vm.close }
-                              },
-                              [_vm._v(" Cancel ")]
                             ),
                             _vm._v(" "),
                             _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "blue darken-1", text: "" },
-                                on: { click: _vm.save }
-                              },
-                              [_vm._v(" Save ")]
+                              "v-card-actions",
+                              [
+                                _c("v-spacer"),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "blue darken-1", text: "" },
+                                    on: { click: _vm.close }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                Cancel\n              "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "blue darken-1", text: "" },
+                                    on: { click: _vm.save }
+                                  },
+                                  [_vm._v(" Save ")]
+                                )
+                              ],
+                              1
                             )
                           ],
                           1
@@ -4376,28 +4453,31 @@ var render = function() {
                   ],
                   1
                 )
-              ],
-              1
-            )
-          ]
-        },
-        proxy: true
-      },
-      {
-        key: "no-data",
-        fn: function() {
-          return [
-            _c(
-              "v-btn",
-              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
-              [_vm._v(" Reset ")]
-            )
-          ]
-        },
-        proxy: true
-      }
-    ])
-  })
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "no-data",
+            fn: function() {
+              return [
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "primary" },
+                    on: { click: _vm.initialize }
+                  },
+                  [_vm._v(" Reset ")]
+                )
+              ]
+            },
+            proxy: true
+          }
+        ])
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -62790,8 +62870,9 @@ var actions = {
               context.getters.getCategories.forEach(function (category) {
                 context.commit("AddNewCategoryNameId", category);
               });
+              console.log(context.state.CategoriesIdsNames);
 
-            case 5:
+            case 6:
             case "end":
               return _context.stop();
           }

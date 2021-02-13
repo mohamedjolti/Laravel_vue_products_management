@@ -27,6 +27,7 @@ const actions = {
         context.getters.getCategories.forEach(category => {
             context.commit("AddNewCategoryNameId", category)
         })
+        console.log(context.state.CategoriesIdsNames);
 
     },
     //add new Category 
