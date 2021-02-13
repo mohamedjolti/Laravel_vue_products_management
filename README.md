@@ -17,7 +17,7 @@ Please check the official laravel installation guide for server requirements bef
 
 Clone the repository
 
-    git clone https://github.com/mohamedjolti/Laravel_vue_products_management
+    git clone https://github.com/mohamedjolti/Laravel_vue_products_management.git
 
 Switch to the repo folder
 
