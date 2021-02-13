@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
-use App\Services\Validation;
+use App\Services\ValidationService;
 
 class CategoryController extends Controller
 {
@@ -41,8 +41,8 @@ class CategoryController extends Controller
     {
 
         //validation
-         if(Validation::validatorCreateCategory($request->all())!==true){
-             return Validation::validatorCreateCategory($request->all());
+         if(ValidationService::validatorCreateCategory($request->all())!==true){
+             return ValidationService::validatorCreateCategory($request->all());
          }
 
         $category = Category::create($request->all());

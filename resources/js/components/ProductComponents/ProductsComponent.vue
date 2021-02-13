@@ -192,6 +192,24 @@ export default {
       "getCategoryNameById",
     ]),
 
+    initialize() {
+      this.desserts = [
+        {
+          name: "ddsd",
+          description: 159,
+          price: 6.0,
+          category: 24,
+          image: 4.0,
+        },
+        {
+          name: "ddsd",
+          description: 159,
+          price: 6.0,
+          category: 24,
+          image: 4.0,
+        },
+      ];
+    },
 
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);

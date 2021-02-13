@@ -2144,6 +2144,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.fetchProducts();
   },
   methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["fetchProducts", "addProduct", "fetchCategories", "getCategoryNameById"])), {}, {
+    initialize: function initialize() {
+      this.desserts = [{
+        name: "ddsd",
+        description: 159,
+        price: 6.0,
+        category: 24,
+        image: 4.0
+      }, {
+        name: "ddsd",
+        description: 159,
+        price: 6.0,
+        category: 24,
+        image: 4.0
+      }];
+    },
     editItem: function editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);

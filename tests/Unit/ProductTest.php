@@ -6,7 +6,7 @@ use Tests\TestCase;
 use App\Category;
 use App\Services\Validation;
 use App\Product;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Services\FileService;
 
 class ProductTest extends TestCase
 {
@@ -22,28 +22,7 @@ class ProductTest extends TestCase
         $this->assertTrue(true);
     }
 
-    //get file from url 
-    public function getFile($url)
-    {
-        //get name file by url and save in object-file
-        $path_parts = pathinfo($url);
-        //get image info (mime, size in pixel, size in bits)
-        $newPath = $path_parts['dirname'] . '/tmp-files/';
-        if(!is_dir ($newPath)){
-            mkdir($newPath, 0777);
-        }
-        $newUrl = $newPath . $path_parts['basename'];
-        copy($url, $newUrl);
-        $imgInfo = getimagesize($newUrl);
-        $file = new UploadedFile(
-            $newUrl,
-            $path_parts['basename'],
-            $imgInfo['mime'],
-            filesize($url),
-            TRUE,
-        );
-        return $file;
-    }
+
 
 
     public function test_can_create_product() {
@@ -62,7 +41,8 @@ class ProductTest extends TestCase
         $categories = Category::pluck('id')->toArray();
         // generate new file using the methode getFile 
         $url = public_path('images/demo.png');
-        $file = $this->getFile($url);
+        $file = FileService::getFile($url);
+        //retun the data
         return  [
             'name' => $this->faker->sentence,
             'description'=>$this->faker->sentence,

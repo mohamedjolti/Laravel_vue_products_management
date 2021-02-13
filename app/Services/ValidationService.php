@@ -5,7 +5,7 @@ namespace App\Services;
 use Validator;
 
 
-class Validation
+class ValidationService
 {
 
     /**
@@ -39,6 +39,7 @@ class Validation
             'name' => 'required',
             'description' => 'required',
             'price' => 'required'
+            
         ];
         //message for each rule
         $messages = [

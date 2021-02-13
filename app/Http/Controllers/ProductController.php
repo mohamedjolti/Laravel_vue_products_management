@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
-use Validator;
-use App\Services\Validation;
-
+use App\Services\ValidationService;
+use App\Services\FileService;
 
 class ProductController extends Controller
 {
@@ -15,19 +14,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function Upload(Request $request, $Name_File)
-    {
-        //get the file name
-        $filenameWithExt = $request->file($Name_File)->getClientOriginalName();
 
-        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        //get extansion
-        $extension = $request->file($Name_File)->getClientOriginalExtension();
-        //get the name of the file
-        $filenameToStore = $filename . '.' . $extension;
-        // store the image
-        $path = $request->file($Name_File)->storeAs('public/photos/', $filenameToStore);
-    }
 
     public function index()
     {
@@ -56,15 +43,17 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //validation
-        if (Validation::validatorCreateProduct($request->all()) !== true) {
-            return Validation::validatorCreateProduct($request->all());
+        if (ValidationService::validatorCreateProduct($request->all()) !== true) {
+            return ValidationService::validatorCreateProduct($request->all());
         };
 
         // creation of new product
         $product = new Product($request->all());
+        //set the image of the product (bacuse is not in request->all() array)
         $product->image = $request->file("image")->getClientOriginalName();
         $product->save();
-        $this->Upload($request, "image");
+        // upload the file
+        FileService::Upload($request->file("image"));
 
         return response()->json($product, 201);
     }
